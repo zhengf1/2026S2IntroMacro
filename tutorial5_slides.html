@@ -1,0 +1,868 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ECON10003 Tutorial 5 — Slides</title>
+  <!-- Google Fonts & KaTeX -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body);"></script>
+
+  <style>
+    :root {
+      --bg-gradient: radial-gradient(circle at 50% 15%, #f8fafc 0%, #eef2f6 100%);
+      --text-main: #0f172a;
+      --text-muted: #64748b;
+      --card-bg: #ffffff;
+      --card-border: #e2e8f0;
+      --card-shadow: 0 20px 45px -10px rgba(15, 23, 42, 0.08), 0 0 1px 1px rgba(15, 23, 42, 0.04);
+      
+      --primary-blue: #0284c7;
+      --primary-dark: #092958;
+      --accent-indigo: #4f46e5;
+      --accent-amber: #d97706;
+      --accent-red: #dc2626;
+      --accent-green: #16a34a;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Outfit', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--bg-gradient);
+      color: var(--text-main);
+      min-height: 100vh;
+      overflow: hidden;
+      user-select: none;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    /* Header */
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 22px 36px;
+      z-index: 10;
+    }
+
+    .badge-group {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 14px;
+      background: rgba(2, 132, 199, 0.08);
+      border: 1px solid rgba(2, 132, 199, 0.2);
+      border-radius: 9999px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--primary-dark);
+      letter-spacing: 0.02em;
+    }
+
+    .badge-dot {
+      width: 7px;
+      height: 7px;
+      background: var(--primary-blue);
+      border-radius: 50%;
+    }
+
+    .slide-counter {
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--text-muted);
+    }
+
+    /* Main Slide Canvas */
+    main {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 16px 40px;
+      position: relative;
+    }
+
+    .slide-deck {
+      position: relative;
+      width: 100%;
+      max-width: 1060px;
+      height: 470px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .slide {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(16px) scale(0.985);
+      transition: opacity 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+                  transform 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+                  visibility 0.35s;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 44px 48px;
+      border-radius: 28px;
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      box-shadow: var(--card-shadow);
+    }
+
+    .slide.active {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0) scale(1);
+    }
+
+    /* Special Tag Badges */
+    .type-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 5px 14px;
+      border-radius: 9999px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 24px;
+    }
+
+    .type-tag.question {
+      background: #eff6ff;
+      color: #2563eb;
+      border: 1px solid #bfdbfe;
+    }
+
+    .type-tag.discuss {
+      background: #fef3c7;
+      color: #b45309;
+      border: 1px solid #fde68a;
+    }
+
+    .type-tag.answer {
+      background: #f0fdf4;
+      color: #16a34a;
+      border: 1px solid #bbf7d0;
+    }
+
+    .type-tag.mechanism {
+      background: #f1f5f9;
+      color: #475569;
+      border: 1px solid #cbd5e1;
+    }
+
+    .type-tag.overview {
+      background: #f5f3ff;
+      color: #7c3aed;
+      border: 1px solid #ddd6fe;
+    }
+
+    /* Single Sentence Styling */
+    .slide-sentence {
+      font-size: clamp(1.9rem, 3.4vw, 2.9rem);
+      font-weight: 700;
+      line-height: 1.36;
+      color: var(--text-main);
+      max-width: 940px;
+      text-wrap: balance;
+    }
+
+    .slide-sentence.question-text {
+      color: #1e293b;
+    }
+
+    .slide-sentence .highlight {
+      color: var(--primary-blue);
+      font-weight: 800;
+    }
+
+    .slide-sentence .warn {
+      color: var(--accent-red);
+      font-weight: 800;
+    }
+
+    .slide-sentence .green {
+      color: var(--accent-green);
+      font-weight: 800;
+    }
+
+    .slide-sentence .gold {
+      color: var(--accent-amber);
+      font-weight: 800;
+    }
+
+    /* Flow / Chain Diagram Styling */
+    .flow-chain {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      font-size: clamp(1.15rem, 2.1vw, 1.55rem);
+      font-weight: 600;
+      line-height: 1.6;
+    }
+
+    .flow-item {
+      background: #f8fafc;
+      color: #1e293b;
+      padding: 10px 20px;
+      border-radius: 14px;
+      border: 1px solid #e2e8f0;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
+    }
+
+    .flow-item.highlight {
+      background: #eff6ff;
+      color: #0369a1;
+      border-color: #bae6fd;
+    }
+
+    .flow-item.warn {
+      background: #fef2f2;
+      color: #b91c1c;
+      border-color: #fecaca;
+    }
+
+    .flow-arrow {
+      color: #f59e0b;
+      font-weight: 800;
+      font-size: 1.5rem;
+    }
+
+    /* Table in Slide */
+    .balance-table {
+      width: 80%;
+      max-width: 600px;
+      border-collapse: collapse;
+      margin-top: 14px;
+      border-radius: 14px;
+      overflow: hidden;
+      border: 1px solid #cbd5e1;
+    }
+
+    .balance-table th {
+      background: #0284c7;
+      color: #ffffff;
+      padding: 12px;
+      font-size: 1.15rem;
+      font-weight: 700;
+    }
+
+    .balance-table td {
+      background: #f8fafc;
+      color: #334155;
+      padding: 14px;
+      font-size: 1.1rem;
+      border-top: 1px solid #e2e8f0;
+    }
+
+    /* Footer & Controls */
+    footer {
+      padding: 18px 36px 26px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      z-index: 10;
+    }
+
+    .progress-bar-container {
+      width: 100%;
+      height: 6px;
+      background: #e2e8f0;
+      border-radius: 9999px;
+      overflow: hidden;
+      cursor: pointer;
+    }
+
+    .progress-bar {
+      height: 100%;
+      background: linear-gradient(90deg, #0284c7, #38bdf8);
+      width: 0%;
+      transition: width 0.3s ease;
+    }
+
+    .controls-wrapper {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .hints {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      display: flex;
+      gap: 16px;
+    }
+
+    .kbd {
+      background: #ffffff;
+      border: 1px solid #cbd5e1;
+      border-radius: 6px;
+      padding: 2px 7px;
+      font-size: 0.75rem;
+      color: #334155;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+    }
+
+    .btn-group {
+      display: flex;
+      gap: 10px;
+    }
+
+    button {
+      background: #ffffff;
+      border: 1px solid #cbd5e1;
+      color: #1e293b;
+      padding: 9px 18px;
+      border-radius: 12px;
+      font-family: inherit;
+      font-size: 0.92rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.15s ease;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    }
+
+    button:hover {
+      background: #f8fafc;
+      border-color: #94a3b8;
+      transform: translateY(-1px);
+    }
+
+    button:active {
+      transform: translateY(0);
+    }
+
+    button:disabled {
+      opacity: 0.35;
+      cursor: not-allowed;
+      transform: none;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Header -->
+  <header>
+    <div class="badge-group">
+      <div class="badge">
+        <span class="badge-dot"></span>
+        <span>ECON10003 Introductory Macroeconomics</span>
+      </div>
+    </div>
+    <div class="slide-counter" id="slideCounter">Slide 1 / 40</div>
+  </header>
+
+  <!-- Slide Canvas -->
+  <main>
+    <div class="slide-deck" id="slideDeck">
+
+      <!-- Slide 1: Title -->
+      <div class="slide active">
+        <div class="type-tag overview">Tutorial 5</div>
+        <div class="slide-sentence">
+          Financial Claims Scheme, Monetary Targeting, and Silicon Valley Bank.
+        </div>
+      </div>
+
+      <!-- SECTION 1: FCS & Bank Runs -->
+      <!-- Slide 2: Q1 Question -->
+      <div class="slide">
+        <div class="type-tag discuss">Think &amp; Discuss</div>
+        <div class="slide-sentence question-text">
+          “It is 2008. You have $100,000 in your bank. There are rumours that your bank may become insolvent, and the government does not guarantee your deposit. What would you do?”
+        </div>
+      </div>
+
+      <!-- Slide 3: Q1 Answer -->
+      <div class="slide">
+        <div class="type-tag answer">Takeaway</div>
+        <div class="slide-sentence">
+          You have a strong incentive to <span class="warn">withdraw your money immediately</span>.
+        </div>
+      </div>
+
+      <!-- Slide 4: Q1 Collective Outcome -->
+      <div class="slide">
+        <div class="type-tag answer">Mechanism</div>
+        <div class="slide-sentence">
+          If many depositors act on this incentive together, it generates a <span class="warn">bank run</span>, potentially collapsing the bank.
+        </div>
+      </div>
+
+      <!-- Slide 5: Q2 Question -->
+      <div class="slide">
+        <div class="type-tag discuss">Think &amp; Discuss</div>
+        <div class="slide-sentence question-text">
+          “If everyone is worried about banks, will it become easier or harder for banks to attract funding? What happens to the cost?”
+        </div>
+      </div>
+
+      <!-- Slide 6: Q2 Answer -->
+      <div class="slide">
+        <div class="type-tag answer">Takeaway</div>
+        <div class="slide-sentence">
+          Funding becomes <span class="highlight">harder to attract</span> and <span class="warn">more expensive</span> as investors demand a higher risk premium.
+        </div>
+      </div>
+
+      <!-- Slide 7: Q2 Mechanism -->
+      <div class="slide">
+        <div class="type-tag mechanism">Transmission Chain</div>
+        <div class="flow-chain">
+          <span class="flow-item">Uncertainty</span>
+          <span class="flow-arrow">&rarr;</span>
+          <span class="flow-item">Withdrawals</span>
+          <span class="flow-arrow">&rarr;</span>
+          <span class="flow-item">Bank-run risk</span>
+          <span class="flow-arrow">&rarr;</span>
+          <span class="flow-item warn">Higher funding cost</span>
+        </div>
+      </div>
+
+      <!-- Slide 8: Policy Question -->
+      <div class="slide">
+        <div class="type-tag discuss">Think &amp; Discuss</div>
+        <div class="slide-sentence question-text">
+          “The government announces: deposits up to $250,000 are guaranteed. Does your decision change?”
+        </div>
+      </div>
+
+      <!-- Slide 9: Policy Answer -->
+      <div class="slide">
+        <div class="type-tag answer">Takeaway</div>
+        <div class="slide-sentence">
+          <span class="green">Yes.</span> Depositors stay put because the government compensates them if the bank fails.
+        </div>
+      </div>
+
+      <!-- Slide 10: Policy Outcome -->
+      <div class="slide">
+        <div class="type-tag answer">Outcome</div>
+        <div class="slide-sentence">
+          Eliminating bank-run risk substantially <span class="highlight">lowers banks' funding costs</span>.
+        </div>
+      </div>
+
+      <!-- Slide 11: Policy Mechanism -->
+      <div class="slide">
+        <div class="type-tag mechanism">Policy Transmission</div>
+        <div class="flow-chain">
+          <span class="flow-item highlight">Deposit guarantee</span>
+          <span class="flow-arrow">&rarr;</span>
+          <span class="flow-item">Lower depositor risk</span>
+          <span class="flow-arrow">&rarr;</span>
+          <span class="flow-item">Fewer withdrawals</span>
+          <span class="flow-arrow">&rarr;</span>
+          <span class="flow-item">Lower bank-run risk</span>
+          <span class="flow-arrow">&rarr;</span>
+          <span class="flow-item highlight">Lower funding cost</span>
+        </div>
+      </div>
+
+      <!-- Slide 12: Q1(b) Question -->
+      <div class="slide">
+        <div class="type-tag discuss">Think &amp; Discuss</div>
+        <div class="slide-sentence question-text">
+          “Suppose banks now struggle to raise funds. I'm not a banker, so why should I care?”
+        </div>
+      </div>
+
+      <!-- Slide 13: Q1(b) Answer -->
+      <div class="slide">
+        <div class="type-tag answer">Takeaway</div>
+        <div class="slide-sentence">
+          Banks cannot intermediate effectively, so <span class="warn">firms find it harder to finance productive investments</span>.
+        </div>
+      </div>
+
+      <!-- Slide 14: Q1(b) Real Economy Impact -->
+      <div class="slide">
+        <div class="type-tag answer">Real Economy Impact</div>
+        <div class="slide-sentence">
+          Lower investment directly drags down <span class="warn">equilibrium output and employment</span>.
+        </div>
+      </div>
+
+      <!-- Slide 15: Q1(b) Chain -->
+      <div class="slide">
+        <div class="type-tag mechanism">Macroeconomic Transmission</div>
+        <div class="flow-chain">
+          <span class="flow-item">Less bank funding</span>
+          <span class="flow-arrow">&rarr;</span>
+          <span class="flow-item">Less lending</span>
+          <span class="flow-arrow">&rarr;</span>
+          <span class="flow-item">Less investment</span>
+          <span class="flow-arrow">&rarr;</span>
+          <span class="flow-item warn">Lower output and employment</span>
+        </div>
+      </div>
+
+      <!-- SECTION 2: Monetary Targeting -->
+      <!-- Slide 16: Theory Intro -->
+      <div class="slide">
+        <div class="type-tag overview">Theory: Quantity Equation</div>
+        <div class="slide-sentence">
+          We start from the Quantity Theory identity: \( MV = PY \).
+        </div>
+      </div>
+
+      <!-- Slide 17: Inflation Question -->
+      <div class="slide">
+        <div class="type-tag discuss">Think &amp; Discuss</div>
+        <div class="slide-sentence question-text">
+          “What does the quantity theory tell us about long-run inflation?”
+        </div>
+      </div>
+
+      <!-- Slide 18: Inflation Answer -->
+      <div class="slide">
+        <div class="type-tag answer">Takeaway</div>
+        <div class="slide-sentence">
+          Long-run inflation equals money growth minus potential output growth: \( \pi = g_M - g_{Y^*} \).
+        </div>
+      </div>
+
+      <!-- Slide 19: Underlying Assumptions -->
+      <div class="slide">
+        <div class="type-tag overview">Underlying Assumptions</div>
+        <div class="slide-sentence">
+          Assumptions: Long-run output is independent of money, velocity is constant, and the central bank controls money supply.
+        </div>
+      </div>
+
+      <!-- Slide 20: Sensible Question -->
+      <div class="slide">
+        <div class="type-tag discuss">Think &amp; Discuss</div>
+        <div class="slide-sentence question-text">
+          “Suppose these assumptions are all true. Why might a central bank target money growth?”
+        </div>
+      </div>
+
+      <!-- Slide 21: Sensible Answer -->
+      <div class="slide">
+        <div class="type-tag answer">Takeaway</div>
+        <div class="slide-sentence">
+          Because controlling money growth (\( g_M \)) provides a direct mechanism to <span class="highlight">control long-run inflation (\( \pi \))</span>.
+        </div>
+      </div>
+
+      <!-- Slide 22: Potential Output Question -->
+      <div class="slide">
+        <div class="type-tag discuss">Think &amp; Discuss</div>
+        <div class="slide-sentence question-text">
+          “Potential output \( Y^* \). What's the practical problem?”
+        </div>
+      </div>
+
+      <!-- Slide 23: Potential Output Answer -->
+      <div class="slide">
+        <div class="type-tag answer">Takeaway</div>
+        <div class="slide-sentence">
+          Potential output <span class="warn">cannot be directly observed or measured</span>, making the target money growth rate uncertain.
+        </div>
+      </div>
+
+      <!-- Slide 24: Base Money Question -->
+      <div class="slide">
+        <div class="type-tag discuss">Think &amp; Discuss</div>
+        <div class="slide-sentence question-text">
+          “The central bank controls base money \( M_0 \). Does that mean it controls broad money \( M = k M_0 \)?”
+        </div>
+      </div>
+
+      <!-- Slide 25: Base Money Answer -->
+      <div class="slide">
+        <div class="type-tag answer">Takeaway</div>
+        <div class="slide-sentence">
+          Only if \( k \) is constant, but the multiplier \( k \) <span class="warn">fluctuates with commercial bank lending behavior</span>.
+        </div>
+      </div>
+
+      <!-- Slide 26: Velocity Question -->
+      <div class="slide">
+        <div class="type-tag discuss">Think &amp; Discuss</div>
+        <div class="slide-sentence question-text">
+          “What about velocity? Can we safely assume \( V \) is constant?”
+        </div>
+      </div>
+
+      <!-- Slide 27: Velocity Answer -->
+      <div class="slide">
+        <div class="type-tag answer">Takeaway</div>
+        <div class="slide-sentence">
+          <span class="warn">No.</span> Velocity shifts dynamically with technological and financial payment innovations.
+        </div>
+      </div>
+
+      <!-- SECTION 3: Silicon Valley Bank -->
+      <!-- Slide 28: Balance Sheet -->
+      <div class="slide">
+        <div class="type-tag overview">SVB Simplified Balance Sheet</div>
+        <table class="balance-table">
+          <thead>
+            <tr>
+              <th>Assets</th>
+              <th>Liabilities</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Reserves<br>Loans<br>Fixed-income securities</td>
+              <td>Customer deposits</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Slide 29: Stage 1 Question -->
+      <div class="slide">
+        <div class="type-tag discuss">Think &amp; Discuss: Stage 1</div>
+        <div class="slide-sentence question-text">
+          “SVB attracts lots of deposits from tech startups. Tell me what changes on the balance sheet (\( \uparrow \), \( \downarrow \) or unchanged)?”
+        </div>
+      </div>
+
+      <!-- Slide 30: Stage 1 Answer -->
+      <div class="slide">
+        <div class="type-tag answer">Takeaway: Stage 1</div>
+        <div class="slide-sentence">
+          <span class="highlight">Customer deposits \( \uparrow \)</span> and initially <span class="highlight">Reserves \( \uparrow \)</span> (both sides expand).
+        </div>
+      </div>
+
+      <!-- Slide 31: Stage 1 Follow-up -->
+      <div class="slide">
+        <div class="type-tag discuss">Think &amp; Discuss: Stage 1</div>
+        <div class="slide-sentence question-text">
+          “Should SVB just leave all that incoming money as reserves?”
+        </div>
+      </div>
+
+      <!-- Slide 32: Stage 2 Answer -->
+      <div class="slide">
+        <div class="type-tag answer">Takeaway: Stage 2</div>
+        <div class="slide-sentence">
+          SVB purchases fixed-income securities (bonds) for higher return: <span class="highlight">\( \text{Reserves} \downarrow, \text{Bonds} \uparrow \)</span>.
+        </div>
+      </div>
+
+      <!-- Slide 33: Stage 3 Question -->
+      <div class="slide">
+        <div class="type-tag discuss">Think &amp; Discuss: Stage 3</div>
+        <div class="slide-sentence question-text">
+          “Interest rates now rise substantially. What happens to the value of SVB's existing fixed-income securities?”
+        </div>
+      </div>
+
+      <!-- Slide 34: Stage 3 Answer -->
+      <div class="slide">
+        <div class="type-tag answer">Takeaway: Stage 3</div>
+        <div class="slide-sentence">
+          \( i \uparrow \implies P_{\text{bond}} \downarrow \): The <span class="warn">market value of SVB's existing securities plunges</span>.
+        </div>
+      </div>
+
+      <!-- Slide 35: Stage 4 Question -->
+      <div class="slide">
+        <div class="type-tag discuss">Think &amp; Discuss: Stage 4</div>
+        <div class="slide-sentence question-text">
+          “Tech funding dries up and startups withdraw deposits (\( \text{Deposits} \downarrow \)). SVB has lots of assets — why is withdrawal a problem?”
+        </div>
+      </div>
+
+      <!-- Slide 36: Stage 4 Answer -->
+      <div class="slide">
+        <div class="type-tag answer">Takeaway: Stage 4</div>
+        <div class="slide-sentence">
+          Cash reserves are insufficient, forcing SVB to <span class="warn">sell devalued securities at a loss</span> to fund withdrawals.
+        </div>
+      </div>
+
+      <!-- Slide 37: Stage 5 Question -->
+      <div class="slide">
+        <div class="type-tag discuss">Think &amp; Discuss: Stage 5</div>
+        <div class="slide-sentence question-text">
+          “SVB announces that it has sold assets at a loss. You're another tech company with $10M deposited there. What do you do?”
+        </div>
+      </div>
+
+      <!-- Slide 38: Stage 5 Answer -->
+      <div class="slide">
+        <div class="type-tag answer">Takeaway: Stage 5</div>
+        <div class="slide-sentence">
+          Withdraw immediately.
+        </div>
+      </div>
+
+      <!-- Slide 39: Stage 5 Panic Question & Outcome -->
+      <div class="slide">
+        <div class="type-tag answer">Stage 5: Panic &amp; Run</div>
+        <div class="slide-sentence">
+          When everyone acts together, the news generates panic, producing a <span class="warn">catastrophic bank run</span>.
+        </div>
+      </div>
+
+      <!-- Slide 40: Complete Mechanism Chain -->
+      <div class="slide">
+        <div class="type-tag mechanism">Complete SVB Failure Chain</div>
+        <div class="flow-chain">
+          <span class="flow-item">Deposit inflows</span>
+          <span class="flow-arrow">&rarr;</span>
+          <span class="flow-item">Bond purchases</span>
+          <span class="flow-arrow">&rarr;</span>
+          <span class="flow-item">Interest rates rise</span>
+          <span class="flow-arrow">&rarr;</span>
+          <span class="flow-item warn">Bond values fall</span>
+          <span class="flow-arrow">&rarr;</span>
+          <span class="flow-item">Withdrawals</span>
+          <span class="flow-arrow">&rarr;</span>
+          <span class="flow-item">Forced sales</span>
+          <span class="flow-arrow">&rarr;</span>
+          <span class="flow-item warn">Realised losses</span>
+          <span class="flow-arrow">&rarr;</span>
+          <span class="flow-item warn">Panic &amp; Bank run</span>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- Controls & Progress Bar -->
+  <footer>
+    <div class="progress-bar-container" id="progressContainer">
+      <div class="progress-bar" id="progressBar"></div>
+    </div>
+    <div class="controls-wrapper">
+      <div class="hints">
+        <span>Use <span class="kbd">&larr;</span> / <span class="kbd">&rarr;</span> or <span class="kbd">Space</span></span>
+        <span>Click anywhere to advance</span>
+      </div>
+      <div class="btn-group">
+        <button id="prevBtn" disabled>&#8592; Previous</button>
+        <button id="nextBtn">Next &#8594;</button>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    const slides = Array.from(document.querySelectorAll('.slide'));
+    const slideCounter = document.getElementById('slideCounter');
+    const progressBar = document.getElementById('progressBar');
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    const progressContainer = document.getElementById('progressContainer');
+
+    let currentIndex = 0;
+    const totalSlides = slides.length;
+
+    function updateSlide(index) {
+      if (index < 0 || index >= totalSlides) return;
+      
+      slides[currentIndex].classList.remove('active');
+      currentIndex = index;
+      slides[currentIndex].classList.add('active');
+
+      // Update counter and progress bar
+      slideCounter.textContent = `Slide ${currentIndex + 1} / ${totalSlides}`;
+      const progressPercent = ((currentIndex + 1) / totalSlides) * 100;
+      progressBar.style.width = `${progressPercent}%`;
+
+      // Update button states
+      prevBtn.disabled = currentIndex === 0;
+      nextBtn.disabled = currentIndex === totalSlides - 1;
+
+      // Render math if KaTeX is loaded
+      if (window.renderMathInElement) {
+        renderMathInElement(slides[currentIndex]);
+      }
+    }
+
+    function nextSlide() {
+      if (currentIndex < totalSlides - 1) {
+        updateSlide(currentIndex + 1);
+      }
+    }
+
+    function prevSlide() {
+      if (currentIndex > 0) {
+        updateSlide(currentIndex - 1);
+      }
+    }
+
+    // Event Listeners
+    nextBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      nextSlide();
+    });
+
+    prevBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      prevSlide();
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') {
+        e.preventDefault();
+        nextSlide();
+      } else if (e.key === 'ArrowLeft' || e.key === 'PageUp') {
+        e.preventDefault();
+        prevSlide();
+      } else if (e.key === 'Home') {
+        e.preventDefault();
+        updateSlide(0);
+      } else if (e.key === 'End') {
+        e.preventDefault();
+        updateSlide(totalSlides - 1);
+      }
+    });
+
+    // Advance on clicking main area
+    document.querySelector('main').addEventListener('click', () => {
+      nextSlide();
+    });
+
+    // Jump by clicking on progress bar
+    progressContainer.addEventListener('click', (e) => {
+      const rect = progressContainer.getBoundingClientRect();
+      const clickX = e.clientX - rect.left;
+      const ratio = clickX / rect.width;
+      const targetIndex = Math.min(totalSlides - 1, Math.max(0, Math.floor(ratio * totalSlides)));
+      updateSlide(targetIndex);
+    });
+
+    // Initial setup
+    updateSlide(0);
+  </script>
+</body>
+</html>

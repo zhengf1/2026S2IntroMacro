@@ -1,0 +1,1058 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ECON10003 Tutorial 9 — Slides</title>
+  <!-- Google Fonts & KaTeX -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body);"></script>
+
+  <style>
+    :root {
+      --bg-gradient: radial-gradient(circle at 50% 15%, #f8fafc 0%, #eef2f6 100%);
+      --text-main: #0f172a;
+      --text-muted: #64748b;
+      --card-bg: #ffffff;
+      --card-border: #e2e8f0;
+      --card-shadow: 0 20px 45px -10px rgba(15, 23, 42, 0.08), 0 0 1px 1px rgba(15, 23, 42, 0.04);
+      
+      --primary-blue: #0284c7;
+      --primary-dark: #092958;
+      --accent-indigo: #4f46e5;
+      --accent-amber: #d97706;
+      --accent-red: #dc2626;
+      --accent-green: #16a34a;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Outfit', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--bg-gradient);
+      color: var(--text-main);
+      min-height: 100vh;
+      overflow: hidden;
+      user-select: none;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    /* Header */
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 36px;
+      z-index: 10;
+    }
+
+    .badge-group {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 14px;
+      background: rgba(2, 132, 199, 0.08);
+      border: 1px solid rgba(2, 132, 199, 0.2);
+      border-radius: 9999px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--primary-dark);
+      letter-spacing: 0.02em;
+    }
+
+    .badge-dot {
+      width: 7px;
+      height: 7px;
+      background: var(--primary-blue);
+      border-radius: 50%;
+    }
+
+    .slide-counter {
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--text-muted);
+    }
+
+    /* Main Slide Canvas */
+    main {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 12px 36px;
+      position: relative;
+    }
+
+    .slide-deck {
+      position: relative;
+      width: 100%;
+      max-width: 1080px;
+      height: 480px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .slide {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(16px) scale(0.985);
+      transition: opacity 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+                  transform 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+                  visibility 0.35s;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 36px 44px;
+      border-radius: 28px;
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      box-shadow: var(--card-shadow);
+    }
+
+    .slide.active {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0) scale(1);
+    }
+
+    /* Special Tag Badges */
+    .type-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 5px 14px;
+      border-radius: 9999px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 18px;
+    }
+
+    .type-tag.question {
+      background: #eff6ff;
+      color: #2563eb;
+      border: 1px solid #bfdbfe;
+    }
+
+    .type-tag.discuss {
+      background: #fef3c7;
+      color: #b45309;
+      border: 1px solid #fde68a;
+    }
+
+    .type-tag.answer {
+      background: #f0fdf4;
+      color: #16a34a;
+      border: 1px solid #bbf7d0;
+    }
+
+    .type-tag.mechanism {
+      background: #f1f5f9;
+      color: #475569;
+      border: 1px solid #cbd5e1;
+    }
+
+    .type-tag.overview {
+      background: #f5f3ff;
+      color: #7c3aed;
+      border: 1px solid #ddd6fe;
+    }
+
+    /* Slide Sentences */
+    .slide-sentence {
+      font-size: clamp(1.75rem, 3.1vw, 2.6rem);
+      font-weight: 700;
+      line-height: 1.35;
+      color: var(--text-main);
+      max-width: 960px;
+      text-wrap: balance;
+    }
+
+    .slide-sentence.question-text {
+      color: #1e293b;
+    }
+
+    .slide-sentence .highlight {
+      color: var(--primary-blue);
+      font-weight: 800;
+    }
+
+    .slide-sentence .warn {
+      color: var(--accent-red);
+      font-weight: 800;
+    }
+
+    .slide-sentence .green {
+      color: var(--accent-green);
+      font-weight: 800;
+    }
+
+    .slide-sentence .gold {
+      color: var(--accent-amber);
+      font-weight: 800;
+    }
+
+    .slide-sentence .indigo {
+      color: var(--accent-indigo);
+      font-weight: 800;
+    }
+
+    .sub-caption {
+      font-size: 1.05rem;
+      font-weight: 500;
+      color: var(--text-muted);
+      margin-top: 14px;
+      max-width: 820px;
+    }
+
+    /* Flow / Chain Diagram Styling */
+    .flow-chain {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      font-size: clamp(1.1rem, 2vw, 1.45rem);
+      font-weight: 600;
+      line-height: 1.5;
+      margin-top: 12px;
+    }
+
+    .flow-item {
+      background: #f8fafc;
+      color: #1e293b;
+      padding: 10px 18px;
+      border-radius: 14px;
+      border: 1px solid #e2e8f0;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
+    }
+
+    .flow-item.highlight {
+      background: #eff6ff;
+      color: #0369a1;
+      border-color: #bae6fd;
+    }
+
+    .flow-item.green {
+      background: #f0fdf4;
+      color: #15803d;
+      border-color: #bbf7d0;
+    }
+
+    .flow-item.warn {
+      background: #fef2f2;
+      color: #b91c1c;
+      border-color: #fecaca;
+    }
+
+    .flow-arrow {
+      color: #f59e0b;
+      font-weight: 800;
+      font-size: 1.4rem;
+    }
+
+    /* Tables */
+    .data-table {
+      width: 85%;
+      max-width: 760px;
+      border-collapse: collapse;
+      margin-top: 14px;
+      border-radius: 14px;
+      overflow: hidden;
+      border: 1px solid #cbd5e1;
+      font-size: 1.05rem;
+    }
+
+    .data-table th {
+      background: #0284c7;
+      color: #ffffff;
+      padding: 10px 14px;
+      font-weight: 700;
+    }
+
+    .data-table td {
+      background: #f8fafc;
+      color: #334155;
+      padding: 10px 14px;
+      border-top: 1px solid #e2e8f0;
+    }
+
+    .data-table tr:nth-child(even) td {
+      background: #ffffff;
+    }
+
+    .badge-pill {
+      display: inline-block;
+      padding: 3px 10px;
+      border-radius: 9999px;
+      font-size: 0.85rem;
+      font-weight: 700;
+    }
+    .badge-pill.green { background: #dcfce7; color: #15803d; }
+    .badge-pill.blue { background: #e0f2fe; color: #0369a1; }
+    .badge-pill.red { background: #fee2e2; color: #b91c1c; }
+
+    /* Grid cards for 2-column comparative layout */
+    .two-cards {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      width: 100%;
+      max-width: 860px;
+      margin-top: 14px;
+      text-align: left;
+    }
+
+    .card-item {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 16px;
+      padding: 16px 20px;
+    }
+
+    .card-item h4 {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--primary-dark);
+      margin-bottom: 8px;
+    }
+
+    .card-item p {
+      font-size: 1rem;
+      color: #334155;
+      line-height: 1.45;
+    }
+
+    /* Footer & Controls */
+    footer {
+      padding: 16px 36px 22px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      z-index: 10;
+    }
+
+    .progress-bar-container {
+      width: 100%;
+      height: 6px;
+      background: #e2e8f0;
+      border-radius: 9999px;
+      overflow: hidden;
+      cursor: pointer;
+    }
+
+    .progress-bar {
+      height: 100%;
+      background: linear-gradient(90deg, #0284c7, #38bdf8);
+      width: 0%;
+      transition: width 0.3s ease;
+    }
+
+    .controls-wrapper {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .hints {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      display: flex;
+      gap: 16px;
+    }
+
+    .kbd {
+      background: #ffffff;
+      border: 1px solid #cbd5e1;
+      border-radius: 6px;
+      padding: 2px 7px;
+      font-size: 0.75rem;
+      color: #334155;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+    }
+
+    .btn-group {
+      display: flex;
+      gap: 10px;
+    }
+
+    button {
+      background: #ffffff;
+      border: 1px solid #cbd5e1;
+      color: #1e293b;
+      padding: 8px 16px;
+      border-radius: 12px;
+      font-family: inherit;
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.15s ease;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    }
+
+    button:hover {
+      background: #f8fafc;
+      border-color: #94a3b8;
+      transform: translateY(-1px);
+    }
+
+    button:active {
+      transform: translateY(0);
+    }
+
+    button:disabled {
+      opacity: 0.35;
+      cursor: not-allowed;
+      transform: none;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Header -->
+  <header>
+    <div class="badge-group">
+      <div class="badge">
+        <span class="badge-dot"></span>
+        <span>ECON10003 Introductory Macroeconomics</span>
+      </div>
+      <div class="badge" style="background: rgba(79, 70, 229, 0.08); border-color: rgba(79, 70, 229, 0.2); color: #4338ca;">
+        <span>Week 10</span>
+      </div>
+    </div>
+    <div class="slide-counter" id="slideCounter">Slide 1 / 30</div>
+  </header>
+
+  <!-- Slide Canvas -->
+  <main>
+    <div class="slide-deck" id="slideDeck">
+
+      <!-- Slide 1: Title -->
+      <div class="slide active">
+        <div class="type-tag overview">Tutorial 9</div>
+        <div class="slide-sentence">
+          International Trade, Comparative Advantage &amp; The <span class="highlight">Ricardian Model</span>.
+        </div>
+        <div class="sub-caption">Opportunity costs, PPF derivations, autarky equilibrium, and terms of trade gains.</div>
+      </div>
+
+      <!-- Slide 2: Roadmap -->
+      <div class="slide">
+        <div class="type-tag overview">Roadmap</div>
+        <div class="two-cards">
+          <div class="card-item">
+            <h4>1. Micro Intuition (Q1)</h4>
+            <p>Bill &amp; Eric: Production time, opportunity costs, and why identical productivities yield zero trade gains.</p>
+          </div>
+          <div class="card-item">
+            <h4>2. Autarky Model (Q2)</h4>
+            <p>Linear PPFs, Absolute Advantage vs. Comparative Advantage, and Leontief equilibrium.</p>
+          </div>
+          <div class="card-item">
+            <h4>3. Free Trade Equilibrium (Q3)</h4>
+            <p>Terms of trade ($1M = 1S$), complete vs. partial specialisation, and trade flows.</p>
+          </div>
+          <div class="card-item">
+            <h4>4. Gains from Trade</h4>
+            <p>Why both countries consume beyond their domestic production possibilities frontiers.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- SECTION 1: QUESTION 1 -->
+      <!-- Slide 3: Q1 Setup -->
+      <div class="slide">
+        <div class="type-tag question">Question 1: Production Data</div>
+        <div class="slide-sentence question-text" style="font-size: 1.85rem; margin-bottom: 12px;">
+          Minutes required to produce 1 unit of each product:
+        </div>
+        <table class="data-table" style="max-width: 520px;">
+          <thead>
+            <tr>
+              <th>Person</th>
+              <th>Beer</th>
+              <th>Soda</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Bill</strong></td>
+              <td>30 min</td>
+              <td>15 min</td>
+            </tr>
+            <tr>
+              <td><strong>Eric</strong></td>
+              <td>60 min</td>
+              <td>30 min</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Slide 4: Q1 (a) Question -->
+      <div class="slide">
+        <div class="type-tag discuss">Think &amp; Discuss</div>
+        <div class="slide-sentence question-text">
+          “What is Bill’s opportunity cost for producing beer? Soda? What about Eric’s?”
+        </div>
+      </div>
+
+      <!-- Slide 5: Q1 (a) Answer -->
+      <div class="slide">
+        <div class="type-tag answer">Opportunity Cost Calculation</div>
+        <div class="slide-sentence">
+          Bill: $1\text{ Beer} = \mathbf{2\text{ Sodas}}$ &nbsp;|&nbsp; Eric: $1\text{ Beer} = \mathbf{2\text{ Sodas}}$.
+        </div>
+        <div class="sub-caption">
+          In the 30 min Bill takes to brew 1 beer, he foregoes $30/15 = 2$ sodas.<br>
+          In the 60 min Eric takes to brew 1 beer, he foregoes $60/30 = 2$ sodas.
+        </div>
+      </div>
+
+      <!-- Slide 6: Q1 (b) Discuss -->
+      <div class="slide">
+        <div class="type-tag discuss">Think &amp; Discuss</div>
+        <div class="slide-sentence question-text">
+          “Are there possible gains from trade between Bill and Eric? Why or why not?”
+        </div>
+      </div>
+
+      <!-- Slide 7: Q1 (b) Answer -->
+      <div class="slide">
+        <div class="type-tag answer">Takeaway</div>
+        <div class="slide-sentence">
+          <span class="warn">No gains from trade exist</span> because their opportunity costs are <span class="highlight">identical</span>.
+        </div>
+        <div class="sub-caption">
+          Trade requires specialisation, which only creates value when opportunity costs differ. Neither individual has a comparative advantage.
+        </div>
+      </div>
+
+      <!-- Slide 8: Q1 (c) Mechanism -->
+      <div class="slide">
+        <div class="type-tag mechanism">Core Principle</div>
+        <div class="slide-sentence">
+          Nations gain <span class="green">most</span> from trade when they have <span class="highlight">different relative productivities</span>.
+        </div>
+        <div class="sub-caption">
+          Differences in opportunity costs create a broader range of mutually advantageous terms of trade.
+        </div>
+      </div>
+
+      <!-- SECTION 2: QUESTION 2 (PRESENTATION QUESTION) -->
+      <!-- Slide 9: Q2 Setup -->
+      <div class="slide">
+        <div class="type-tag overview">Question 2: Model Setup</div>
+        <div class="slide-sentence question-text" style="font-size: 1.8rem; margin-bottom: 12px;">
+          Ricardian Economy ($L_1 = L_2 = 100$ workers)
+        </div>
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Country</th>
+              <th>Labour ($L$)</th>
+              <th>Manufactures Productivity ($A_m$)</th>
+              <th>Services Productivity ($A_s$)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Country 1</strong></td>
+              <td>100</td>
+              <td>$A_m = 4$</td>
+              <td>$A_s = 8$</td>
+            </tr>
+            <tr>
+              <td><strong>Country 2</strong></td>
+              <td>100</td>
+              <td>$A_m^* = 3$</td>
+              <td>$A_s^* = 1$</td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="sub-caption">Note: $A_i$ represents output per worker (productivity), not labor hours!</div>
+      </div>
+
+      <!-- Slide 10: Q2 (a) Resource Constraints -->
+      <div class="slide">
+        <div class="type-tag mechanism">Deriving PPF Equations</div>
+        <div class="two-cards">
+          <div class="card-item">
+            <h4>Country 1 Resource Constraint</h4>
+            <p>$\frac{Y_{m,1}}{4} + \frac{Y_{s,1}}{8} = 100$</p>
+            <p style="margin-top:8px; font-weight:700; color:#0284c7;">$Y_{s,1} = 800 - 2 Y_{m,1}$</p>
+            <p style="font-size:0.9rem; color:#64748b; margin-top:4px;">Intercepts: $(0, 800)$ &amp; $(400, 0)$ | Slope: $-2$</p>
+          </div>
+          <div class="card-item">
+            <h4>Country 2 Resource Constraint</h4>
+            <p>$\frac{Y_{m,2}}{3} + \frac{Y_{s,2}}{1} = 100$</p>
+            <p style="margin-top:8px; font-weight:700; color:#0284c7;">$Y_{s,2} = 100 - \frac{1}{3} Y_{m,2}$</p>
+            <p style="font-size:0.9rem; color:#64748b; margin-top:4px;">Intercepts: $(0, 100)$ &amp; $(300, 0)$ | Slope: $-\frac{1}{3}$</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Slide 11: Q2 (a) PPF Visual -->
+      <div class="slide">
+        <div class="type-tag overview">PPF Geometry</div>
+        <div class="slide-sentence" style="font-size: 1.8rem; margin-bottom: 10px;">
+          Linear PPFs Reflect <span class="highlight">Constant Opportunity Costs</span>
+        </div>
+        <div class="flow-chain">
+          <div class="flow-item"><strong>Country 1:</strong> Max $800S$ or $400M$ (Slope $= -2$)</div>
+          <div class="flow-item"><strong>Country 2:</strong> Max $100S$ or $300M$ (Slope $= -1/3$)</div>
+        </div>
+        <div class="sub-caption">The absolute slope $|dY_s / dY_m| = A_s / A_m$ equals the opportunity cost of Manufactures.</div>
+      </div>
+
+      <!-- Slide 12: Q2 (b) Absolute Advantage -->
+      <div class="slide">
+        <div class="type-tag question">Question 2(b): Absolute Advantage</div>
+        <div class="slide-sentence">
+          Country 1 has an <span class="green">Absolute Advantage in BOTH goods</span>.
+        </div>
+        <div class="flow-chain" style="margin-top: 20px;">
+          <span class="flow-item">Manufactures: $4 > 3$</span>
+          <span class="flow-item">Services: $8 > 1$</span>
+        </div>
+        <div class="sub-caption">One worker produces more units of both manufactures and services in Country 1 than in Country 2.</div>
+      </div>
+
+      <!-- Slide 13: Q2 (c) Comparative Advantage Table -->
+      <div class="slide">
+        <div class="type-tag answer">Question 2(c): Comparative Advantage</div>
+        <table class="data-table" style="max-width: 780px;">
+          <thead>
+            <tr>
+              <th>Good</th>
+              <th>Country 1 OC</th>
+              <th>Country 2 OC</th>
+              <th>Comparative Advantage</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>1 Manufacture ($M$)</strong></td>
+              <td>$\frac{8}{4} = \mathbf{2\text{ Services}}$</td>
+              <td>$\frac{1}{3} = \mathbf{\frac{1}{3}\text{ Services}}$</td>
+              <td><span class="badge-pill green">Country 2 (Lower OC)</span></td>
+            </tr>
+            <tr>
+              <td><strong>1 Service ($S$)</strong></td>
+              <td>$\frac{4}{8} = \mathbf{\frac{1}{2}\text{ Manuf.}}$</td>
+              <td>$\frac{3}{1} = \mathbf{3\text{ Manuf.}}$</td>
+              <td><span class="badge-pill green">Country 1 (Lower OC)</span></td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="sub-caption" style="margin-top: 14px;">Even with absolute disadvantage in both goods, Country 2 has a comparative advantage in Manufactures!</div>
+      </div>
+
+      <!-- Slide 14: Q2 (d) Preferences Setup -->
+      <div class="slide">
+        <div class="type-tag discuss">Question 2(d): Autarky Equilibrium</div>
+        <div class="slide-sentence question-text">
+          Consumers demand manufactures and services in <span class="highlight">equal amounts</span>: $Y_m = Y_s = x$.
+        </div>
+        <div class="sub-caption">Preferences are Leontief (perfect complements), meaning neither good is consumed in excess of the other.</div>
+      </div>
+
+      <!-- Slide 15: Q2 (d) Country 1 Autarky -->
+      <div class="slide">
+        <div class="type-tag answer">Country 1 Autarky Outcome</div>
+        <div class="slide-sentence">
+          $x = 800 - 2x \implies x = \mathbf{266\frac{2}{3} \text{ units}}$
+        </div>
+        <div class="flow-chain" style="margin-top: 18px;">
+          <span class="flow-item">Labour in $M$: $\frac{266.67}{4} = \mathbf{66\frac{2}{3}}$</span>
+          <span class="flow-item">Labour in $S$: $\frac{266.67}{8} = \mathbf{33\frac{1}{3}}$</span>
+        </div>
+        <div class="sub-caption">Twice as much labour is needed for manufactures because $A_m = 4$ is half of $A_s = 8$.</div>
+      </div>
+
+      <!-- Slide 16: Q2 (d) Country 2 Autarky -->
+      <div class="slide">
+        <div class="type-tag answer">Country 2 Autarky Outcome</div>
+        <div class="slide-sentence">
+          $x = 100 - \frac{1}{3}x \implies x = \mathbf{75 \text{ units}}$
+        </div>
+        <div class="flow-chain" style="margin-top: 18px;">
+          <span class="flow-item">Labour in $M$: $\frac{75}{3} = \mathbf{25}$</span>
+          <span class="flow-item">Labour in $S$: $\frac{75}{1} = \mathbf{75}$</span>
+        </div>
+        <div class="sub-caption">Three times as much labour is needed for services because $A_s^* = 1$ is one-third of $A_m^* = 3$.</div>
+      </div>
+
+      <!-- Slide 17: Presentation Challenge Question 1 -->
+      <div class="slide">
+        <div class="type-tag discuss">Challenge Presenters</div>
+        <div class="slide-sentence question-text">
+          “Country 1 is more productive at everything. Why would Country 1 EVER want to buy manufactures from Country 2?”
+        </div>
+      </div>
+
+      <!-- Slide 18: Challenge 1 Answer -->
+      <div class="slide">
+        <div class="type-tag answer">Expected Insight</div>
+        <div class="slide-sentence">
+          Producing manufactures at home forces Country 1 to <span class="warn">divert high-productivity service workers</span>.
+        </div>
+        <div class="sub-caption">
+          Importing $1M$ costs Country 1 only $1S$ on world markets, compared to giving up $2S$ to self-produce.
+        </div>
+      </div>
+
+      <!-- SECTION 3: QUESTION 3 (FREE TRADE) -->
+      <!-- Slide 19: Q3 Setup -->
+      <div class="slide">
+        <div class="type-tag overview">Question 3: Free Trade Equilibrium</div>
+        <div class="slide-sentence">
+          Terms of Trade: <span class="highlight">$1\text{ Service} = 1\text{ Manufacture}$</span> &nbsp;($\frac{P_m}{P_s} = 1$).
+        </div>
+        <div class="sub-caption">
+          Mutually beneficial because $OC_2(M) = \frac{1}{3} < 1 < 2 = OC_1(M)$.
+        </div>
+      </div>
+
+      <!-- Slide 20: Why Solve Country 2 First? -->
+      <div class="slide">
+        <div class="type-tag mechanism">Solving Strategy</div>
+        <div class="slide-sentence">
+          Why calculate <span class="highlight">Country 2 first</span> instead of Country 1?
+        </div>
+        <div class="sub-caption">
+          Country 2 is the smaller capacity economy and <span class="green">completely specializes</span>, which pins down the total volume of world trade!
+        </div>
+      </div>
+
+      <!-- Slide 21: Country 2 Complete Specialisation -->
+      <div class="slide">
+        <div class="type-tag answer">Country 2 Specialisation</div>
+        <div class="slide-sentence">
+          $L_{m,2} = 100, \, L_{s,2} = 0 \implies Y_{m,2} = \mathbf{300 \text{ Manufactures}}$.
+        </div>
+        <div class="flow-chain" style="margin-top: 16px;">
+          <span class="flow-item">Keeps: $150M$</span>
+          <span class="flow-arrow">&rarr;</span>
+          <span class="flow-item green">Exports: $150M$</span>
+          <span class="flow-arrow">&rarr;</span>
+          <span class="flow-item">Imports: $150S$</span>
+        </div>
+        <div class="sub-caption">Country 2 consumes $(150M, 150S)$ — exactly double its autarky consumption of $75$!</div>
+      </div>
+
+      <!-- Slide 22: Country 1 Capacity Constraint -->
+      <div class="slide">
+        <div class="type-tag mechanism">Country 1 Incomplete Specialisation</div>
+        <div class="slide-sentence">
+          Country 1 cannot fully specialise: Country 2 can only supply <span class="warn">150 units of manufactures</span>.
+        </div>
+        <div class="sub-caption">
+          Country 1 imports $150M$, exports $150S$, and must self-produce the remaining manufactures domestically.
+        </div>
+      </div>
+
+      <!-- Slide 23: Country 1 Labor Allocation Equation -->
+      <div class="slide">
+        <div class="type-tag answer">Solving Country 1's Labour</div>
+        <div class="slide-sentence" style="font-size: 1.65rem;">
+          $\underbrace{4 L_{m,1} + 150}_{\text{Total } M \text{ Consumed}} = \underbrace{8(81.25 - L_{m,1})}_{\text{Total } S \text{ Consumed}}$
+        </div>
+        <div class="sub-caption" style="margin-top: 16px;">
+          Exporting $150S$ takes $\frac{150}{8} = 18.75$ workers $\implies 81.25$ workers remain.<br>
+          $12 L_{m,1} = 500 \implies L_{m,1} = \mathbf{41\frac{2}{3}}, \quad L_{s,1} = 18.75 + 39.58 = \mathbf{58\frac{1}{3}}$.
+        </div>
+      </div>
+
+      <!-- Slide 24: Country 1 Production & Consumption -->
+      <div class="slide">
+        <div class="type-tag answer">Country 1 Trade Outcome</div>
+        <div class="flow-chain">
+          <div class="flow-item">Produces $166\frac{2}{3} M$</div>
+          <div class="flow-item green">+ Imports $150 M$</div>
+          <div class="flow-arrow">&rarr;</div>
+          <div class="flow-item highlight">Consumes $\mathbf{316\frac{2}{3} M}$</div>
+        </div>
+        <div class="flow-chain" style="margin-top: 14px;">
+          <div class="flow-item">Produces $466\frac{2}{3} S$</div>
+          <div class="flow-item warn">&minus; Exports $150 S$</div>
+          <div class="flow-arrow">&rarr;</div>
+          <div class="flow-item highlight">Consumes $\mathbf{316\frac{2}{3} S}$</div>
+        </div>
+      </div>
+
+      <!-- Slide 25: Master Comparison Table -->
+      <div class="slide">
+        <div class="type-tag overview">Autarky vs. Free Trade Summary</div>
+        <table class="data-table" style="font-size: 0.92rem; max-width: 820px;">
+          <thead>
+            <tr>
+              <th>Variable</th>
+              <th>Country 1 (Autarky)</th>
+              <th>Country 1 (Trade)</th>
+              <th>Country 2 (Autarky)</th>
+              <th>Country 2 (Trade)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Labour $L_m$</strong></td>
+              <td>$66\frac{2}{3}$</td>
+              <td>$41\frac{2}{3}$ <span style="color:#dc2626;">(&minus;25)</span></td>
+              <td>$25$</td>
+              <td>$100$ <span style="color:#16a34a;">(+75)</span></td>
+            </tr>
+            <tr>
+              <td><strong>Labour $L_s$</strong></td>
+              <td>$33\frac{1}{3}$</td>
+              <td>$58\frac{1}{3}$ <span style="color:#16a34a;">(+25)</span></td>
+              <td>$75$</td>
+              <td>$0$ <span style="color:#dc2626;">(&minus;75)</span></td>
+            </tr>
+            <tr>
+              <td><strong>Production $Y_m$</strong></td>
+              <td>$266\frac{2}{3}$</td>
+              <td>$166\frac{2}{3}$ <span style="color:#dc2626;">(&minus;100)</span></td>
+              <td>$75$</td>
+              <td>$300$ <span style="color:#16a34a;">(+225)</span></td>
+            </tr>
+            <tr>
+              <td><strong>Production $Y_s$</strong></td>
+              <td>$266\frac{2}{3}$</td>
+              <td>$466\frac{2}{3}$ <span style="color:#16a34a;">(+200)</span></td>
+              <td>$75$</td>
+              <td>$0$ <span style="color:#dc2626;">(&minus;75)</span></td>
+            </tr>
+            <tr>
+              <td><strong>Consumption ($M=S$)</strong></td>
+              <td>$266\frac{2}{3}$</td>
+              <td><strong style="color:#0284c7;">$316\frac{2}{3}$ (+50)</strong></td>
+              <td>$75$</td>
+              <td><strong style="color:#0284c7;">$150$ (+75)</strong></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Slide 26: Welfare Gains Diagram -->
+      <div class="slide">
+        <div class="type-tag mechanism">Gains from Trade Mechanism</div>
+        <div class="flow-chain">
+          <span class="flow-item">Specialisation by CA</span>
+          <span class="flow-arrow">&rarr;</span>
+          <span class="flow-item">World Output Expands</span>
+          <span class="flow-arrow">&rarr;</span>
+          <span class="flow-item green">Higher Consumption in Both Nations</span>
+        </div>
+        <div class="sub-caption" style="margin-top: 18px;">
+          Country 1 gains $+50$ units of both goods; Country 2 gains $+75$ units of both goods ($+100\%$ increase!).
+        </div>
+      </div>
+
+      <!-- Slide 27: Challenge Presenters 2 -->
+      <div class="slide">
+        <div class="type-tag discuss">Challenge Presenters</div>
+        <div class="slide-sentence question-text">
+          “What is the exact range of terms of trade $\frac{P_m}{P_s}$ under which BOTH countries gain from trade?”
+        </div>
+      </div>
+
+      <!-- Slide 28: Challenge 2 Answer -->
+      <div class="slide">
+        <div class="type-tag answer">Expected Insight</div>
+        <div class="slide-sentence">
+          $\frac{1}{3} < \frac{P_m}{P_s} < 2$
+        </div>
+        <div class="sub-caption">
+          If $P_m/P_s < 1/3$, Country 2 refuses to trade (cheaper to self-produce services).<br>
+          If $P_m/P_s > 2$, Country 1 refuses to trade (cheaper to self-produce manufactures).
+        </div>
+      </div>
+
+      <!-- Slide 29: Key Takeaways -->
+      <div class="slide">
+        <div class="type-tag overview">Key Exam Takeaways</div>
+        <div class="two-cards">
+          <div class="card-item">
+            <h4>1. Comparative Advantage Rule</h4>
+            <p>Comparative advantage determines trade patterns, not absolute advantage.</p>
+          </div>
+          <div class="card-item">
+            <h4>2. PPF Slope $= A_s / A_m$</h4>
+            <p>The opportunity cost of the horizontal good is the magnitude of the PPF slope.</p>
+          </div>
+          <div class="card-item">
+            <h4>3. Capacity &amp; Specialisation</h4>
+            <p>Smaller trading partners fully specialise; larger economies often partially specialise.</p>
+          </div>
+          <div class="card-item">
+            <h4>4. Unambiguous Gains</h4>
+            <p>Trade expands consumption possibilities strictly outside the domestic PPF.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Slide 30: Conclusion -->
+      <div class="slide">
+        <div class="type-tag overview">End of Tutorial 9</div>
+        <div class="slide-sentence">
+          Ready for Student Presentations &amp; Q&amp;A!
+        </div>
+        <div class="sub-caption">
+          Use the arrows or spacebar to review any slide. Good luck!
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- Footer & Controls -->
+  <footer>
+    <div class="progress-bar-container" id="progressContainer">
+      <div class="progress-bar" id="progressBar"></div>
+    </div>
+    <div class="controls-wrapper">
+      <div class="hints">
+        <span>Navigate: <span class="kbd">&larr;</span> <span class="kbd">&rarr;</span> or <span class="kbd">Space</span></span>
+        <span>Jump: Click progress bar</span>
+      </div>
+      <div class="btn-group">
+        <button id="prevBtn" disabled>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
+          Previous
+        </button>
+        <button id="nextBtn">
+          Next
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+        </button>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Interactive Slide Logic -->
+  <script>
+    const slides = document.querySelectorAll('.slide');
+    const totalSlides = slides.length;
+    let currentIndex = 0;
+
+    const slideCounter = document.getElementById('slideCounter');
+    const progressBar = document.getElementById('progressBar');
+    const progressContainer = document.getElementById('progressContainer');
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+
+    function updateSlide(index) {
+      if (index < 0 || index >= totalSlides) return;
+      
+      slides[currentIndex].classList.remove('active');
+      currentIndex = index;
+      slides[currentIndex].classList.add('active');
+
+      // Update counter and progress bar
+      slideCounter.textContent = `Slide ${currentIndex + 1} / ${totalSlides}`;
+      const progressPercent = ((currentIndex + 1) / totalSlides) * 100;
+      progressBar.style.width = `${progressPercent}%`;
+
+      // Update button states
+      prevBtn.disabled = currentIndex === 0;
+      nextBtn.disabled = currentIndex === totalSlides - 1;
+
+      // Render math if KaTeX is loaded
+      if (window.renderMathInElement) {
+        renderMathInElement(slides[currentIndex], {
+          delimiters: [
+            {left: "$$", right: "$$", display: true},
+            {left: "$", right: "$", display: false}
+          ]
+        });
+      }
+    }
+
+    function nextSlide() {
+      if (currentIndex < totalSlides - 1) {
+        updateSlide(currentIndex + 1);
+      }
+    }
+
+    function prevSlide() {
+      if (currentIndex > 0) {
+        updateSlide(currentIndex - 1);
+      }
+    }
+
+    // Event Listeners
+    nextBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      nextSlide();
+    });
+
+    prevBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      prevSlide();
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') {
+        e.preventDefault();
+        nextSlide();
+      } else if (e.key === 'ArrowLeft' || e.key === 'PageUp') {
+        e.preventDefault();
+        prevSlide();
+      } else if (e.key === 'Home') {
+        e.preventDefault();
+        updateSlide(0);
+      } else if (e.key === 'End') {
+        e.preventDefault();
+        updateSlide(totalSlides - 1);
+      }
+    });
+
+    // Advance on clicking main area
+    document.querySelector('main').addEventListener('click', () => {
+      nextSlide();
+    });
+
+    // Jump by clicking on progress bar
+    progressContainer.addEventListener('click', (e) => {
+      const rect = progressContainer.getBoundingClientRect();
+      const clickX = e.clientX - rect.left;
+      const ratio = clickX / rect.width;
+      const targetIndex = Math.min(totalSlides - 1, Math.max(0, Math.floor(ratio * totalSlides)));
+      updateSlide(targetIndex);
+    });
+
+    // Initial setup
+    document.addEventListener("DOMContentLoaded", () => {
+      updateSlide(0);
+    });
+  </script>
+</body>
+</html>
